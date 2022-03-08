@@ -6,7 +6,7 @@
 	},
 	"item": [
 		{
-			"name": "First",
+			"name": "EP_1",
 			"event": [
 				{
 					"listen": "test",
@@ -17,6 +17,9 @@
 							"});\r",
 							"pm.test(\"In body comes the right string\", function () {\r",
 							"    pm.expect(pm.response.text()).to.include(\"This is the first responce from server!\");\r",
+							"});\r",
+							"pm.test(\"Verify respone is string\", function () {\r",
+							"    typeof(pm.response) === \"string\" || true;\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -44,26 +47,52 @@
 			"response": []
 		},
 		{
-			"name": "User_info_3",
+			"name": "EP_2",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
 							"var jsonData = pm.response.json();\r",
-							"\r",
+							"//var reqdata = request.data\r",
+							"//var salary2 = parseInt(reqData.salary)\r",
 							"\r",
 							"pm.test(\"1.Status code is 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
 							"});\r",
-							"pm.test(\"2.Response name = request name\", function () {\r",
+							"pm.test(\"4.Response name == Kolya\", function () {\r",
 							"    pm.expect(jsonData.name).to.eql(\"Kolya\");\r",
 							"});\r",
-							"pm.test(\"3.Response age = request age\", function () {\r",
+							"pm.test(\"5.Response age = 23\", function () {\r",
 							"    pm.expect(jsonData.age).to.eql(\"23\");\r",
 							"});\r",
-							"pm.test(\"4.Response salary = request salary\", function () {\r",
+							"pm.test(\"6.Response salary = 1000\", function () {\r",
 							"    pm.expect(jsonData.salary).to.eql(1000);\r",
+							"});\r",
+							"//7. Спарсить request(запрос).\r",
+							"var reqData = request.data\r",
+							"var salary2 = parseInt(reqData.salary)\r",
+							"\r",
+							"//8.Проверить, что name в ответе равно name s request(запрос) (name забрать из request.)\r",
+							"pm.test(\"8. Request name == response name\", function () {\r",
+							"pm.expect(reqData.name).to.eql(jsonData.name);\r",
+							"});\r",
+							"//9.Проверить, что age в ответе равно age s request(запрос) (age забрать из request)\r",
+							"pm.test(\"9. Request age == response age\", function () {\r",
+							"pm.expect(reqData.name).to.eql(jsonData.name);\r",
+							"});\r",
+							"//10.Проверить, что salary в ответе равно salary s request(запроса) (salary забрать из request.)\r",
+							"pm.test(\"10. Request salary == response salary\", function () {\r",
+							"pm.expect(salary2).to.eql(jsonData.salary);\r",
+							"});\r",
+							"//11.Вывести в консоль параметр family из response(ответа).\r",
+							"console.log (jsonData.family);\r",
+							"\r",
+							"//12. Проверить что u_salary_1_5_year в ответе равно salary*4 (salary забрать из request)\r",
+							"pm.test(\"12. u_salary_1_5_year == request salary*4\", function () {\r",
+							" // console.log (jsonData.family.u_salary_1_5_year);\r",
+							" // console.log (reqdata.salary);\r",
+							"  pm.expect(jsonData.family.u_salary_1_5_year).to.eql(reqData.salary*4);\r",
 							"});\r",
 							""
 						],
@@ -115,6 +144,102 @@
 					"port": "5005",
 					"path": [
 						"user_info_3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "EP_3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"//var reqData = request.query;\r",
+							"//var salary_2 = parseInt(reqData.salary)\r",
+							"//var reqData = pm.request.url.getQueryString()\r",
+							"//const name = pm.request.url.query.get('name');\r",
+							"//console.log(pm.request.url.query.get())\r",
+							"//console.log(name)\r",
+							"pm.test(\"2.Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"5. Url name == response name\", function () {\r",
+							"var name = pm.request.url.query.get('name');\r",
+							"console.log(name)\r",
+							"pm.expect(name).to.eql(jsonData.name);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"6. Url age == response age\",function(){\r",
+							"    var age = pm.request.url.query.get('age');\r",
+							"    pm.expect(age).to.eql(jsonData.age)\r",
+							"});\r",
+							"\r",
+							"pm.test(\"7. Url salary == response salary\", function(){\r",
+							"    var url_salary = Number(pm.request.url.query.get('salary'));\r",
+							" //   console.log(Number(pm.request.url.query.get('salary')))\r",
+							" //   console.log(jsonData.salary)\r",
+							"    pm.expect(url_salary).to.eql(jsonData.salary)\r",
+							"});\r",
+							"//8. Вывести в консоль параметр family из response.\r",
+							"console.log (jsonData.family)\r",
+							"\r",
+							"//9.Проверить, что у параметра dog есть параметр name\r",
+							"pm.test(\"The parameter dog has parameter name\",() => {\r",
+							"  pm.expect(true).to.eql(jsonData.family.pets.dog.hasOwnProperty(\"name\"));\r",
+							"});\r",
+							"\r",
+							"//10.Проверить, что у параметра dog есть параметр age\r",
+							"pm.test(\"The parameter dog has parameter age\",() => {\r",
+							"  pm.expect(true).to.eql(jsonData.family.pets.dog.hasOwnProperty(\"age\"));\r",
+							"});\r",
+							"\r",
+							"//11. Проверить, что параметр name имеет значение Luky.\r",
+							"pm.test(\"The parameter name has parameter Lucky\",() => {\r",
+							"  pm.expect(jsonData.family.pets.dog.name).to.eql(\"Luky\");\r",
+							"});\r",
+							"\r",
+							"//12. Проверить, что параметр age имеет значение 4.\r",
+							"pm.test(\"The parameter name has parameter Lucky\",() => {\r",
+							"  pm.expect(jsonData.family.pets.dog.age).to.eql(4);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://162.55.220.72:5005/object_info_3?name=Kolya&age=23&salary=1000",
+					"protocol": "http",
+					"host": [
+						"162",
+						"55",
+						"220",
+						"72"
+					],
+					"port": "5005",
+					"path": [
+						"object_info_3"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Kolya"
+						},
+						{
+							"key": "age",
+							"value": "23"
+						},
+						{
+							"key": "salary",
+							"value": "1000"
+						}
 					]
 				}
 			},
